@@ -44,6 +44,7 @@ class AddMaskPatchTrigger(object):
         return self.add_trigger(img)
 
     def add_trigger(self, img):
+        # 把trigger给加到img上
         return img * (self.trigger_array == 0) + self.trigger_array * (self.trigger_array > 0)
 
 class SimpleAdditiveTrigger(object):

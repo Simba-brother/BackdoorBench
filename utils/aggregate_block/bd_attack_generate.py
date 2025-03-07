@@ -47,17 +47,19 @@ def bd_attack_img_trans_generate(args):
     '''
     # idea : use args to choose which backdoor img transform you want
     :param args: args that contains parameters of backdoor attack
+    eg:args.attack|args.patch_mask_path|args.img_size and so on
     :return: transform on img for backdoor attack in both train and test phase
     '''
 
     if args.attack in ['badnet',]:
 
-
+        # resize -> np.array
         trans = transforms.Compose([
             transforms.Resize(args.img_size[:2]),  # (32, 32)
             np.array,
         ])
 
+        # Image.open(img_file_path):返回的是Image类型
         bd_transform = AddMaskPatchTrigger(
             trans(Image.open(args.patch_mask_path)),
         )

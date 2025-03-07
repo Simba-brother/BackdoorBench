@@ -228,6 +228,7 @@ class prepro_cls_DatasetBD_v2(torch.utils.data.Dataset):
 
         self.save_folder_path = save_folder_path # since when we want to save this dataset, this may cause problem
 
+        # full dataset的index_array
         self.original_index_array = np.arange(len(full_dataset_without_transform))
 
         self.bd_data_container = poisonedCLSDataContainer(self.save_folder_path, ".png")
@@ -244,10 +245,12 @@ class prepro_cls_DatasetBD_v2(torch.utils.data.Dataset):
         for selected_index in tqdm(self.original_index_array, desc="prepro_backdoor"):
             if self.poison_indicator[selected_index] == 1:
                 img, label = self.dataset[selected_index]
+                # img此时被投毒了
                 img = self.bd_image_pre_transform(img, target=label, image_serial_id=selected_index)
+                # img的标签被改了
                 bd_label = self.bd_label_pre_transform(label)
                 self.set_one_bd_sample(
-                    selected_index, img, bd_label, label
+                    selected_index, img, bd_label, label # img_idx, bd_img, bd_label, 原标签
                 )
 
     def set_one_bd_sample(self, selected_index, img, bd_label, label):
